@@ -3,7 +3,7 @@
 **
 ** $Id: ut_osapi_stubs.c 1.3 2015/03/06 14:37:16EST sstrege Exp  $
 **
-**  Copyright © 2007-2014 United States Government as represented by the 
+**  Copyright ï¿½ 2007-2014 United States Government as represented by the 
 **  Administrator of the National Aeronautics and Space Administration. 
 **  All Other Rights Reserved.  
 **
@@ -515,7 +515,7 @@ int32 OS_FPUExcGetMask(uint32 *Mask)
                                   Interrupt API
 ****************************************************************************************/
 
-int32 OS_IntAttachHandler(uint32 InterruptNumber, void *InterruptHandler, int32 Parameter)
+int32 OS_IntAttachHandler(uint32 InterruptNumber, osal_task_entry InterruptHandler, int32 Parameter)
 {
     (void) InterruptNumber;
     (void) InterruptHandler;

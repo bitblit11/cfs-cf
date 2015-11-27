@@ -4,7 +4,7 @@
 **
 ** $Id: ut_cfe_sb_hooks.c 1.2 2015/03/06 14:37:08EST sstrege Exp  $
 **
-**  Copyright © 2007-2014 United States Government as represented by the 
+**  Copyright ï¿½ 2007-2014 United States Government as represented by the 
 **  Administrator of the National Aeronautics and Space Administration. 
 **  All Other Rights Reserved.  
 **
@@ -237,7 +237,8 @@ uint16 Ut_CFE_SB_MsgHdrSizeHook(CFE_SB_MsgId_t MsgId)
 
     uint16 size;
     CCSDS_PriHdr_t  CCSDSPriHdr;
-    CCSDSPriHdr.StreamId = MsgId;
+
+    CCSDS_WR_SID(CCSDSPriHdr,MsgId);
 
 	  /* if secondary hdr is not present... */
 	  if(CCSDS_RD_SHDR(CCSDSPriHdr) == 0){

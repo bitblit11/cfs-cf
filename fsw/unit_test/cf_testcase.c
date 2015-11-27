@@ -1,7 +1,7 @@
 /*
  * Filename: cf_testcase.c
  *
- *  Copyright © 2007-2014 United States Government as represented by the 
+ *  Copyright ï¿½ 2007-2014 United States Government as represented by the 
  *  Administrator of the National Aeronautics and Space Administration. 
  *  All Other Rights Reserved.  
  *
@@ -1234,6 +1234,7 @@ void Test_CF_WakeupCmdPollingEnabled(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&WakeupCmdMsg);
 
   /* Verify Outputs */
+  printf("Event Count = %u\n", Ut_CFE_EVS_GetEventQueueDepth());
   UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==2,"Event Count = 2");
   UtAssert_EventSent(CF_OPEN_DIR_ERR_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   //fixme - add test to verify wakeup ctr increments
