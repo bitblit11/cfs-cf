@@ -267,7 +267,7 @@ void *Ut_CFE_SB_GetUserDataHook(CFE_SB_MsgPtr_t MsgPtr)
     uint16          HdrSize;
 
     BytePtr = (uint8 *)MsgPtr;
-    MsgId   = MsgPtr->Hdr.StreamId;
+    MsgId   = (CFE_SB_MsgId_t)MsgPtr->Hdr.StreamId;
     HdrSize = CFE_SB_MsgHdrSize(MsgId);
 
     return (BytePtr + HdrSize);
@@ -300,7 +300,7 @@ uint16 Ut_CFE_SB_GetUserDataLengthHook(CFE_SB_MsgPtr_t MsgPtr)
     uint16 HdrSize;
 
     CFE_SB_MsgId_t MsgId;
-    MsgId = MsgPtr->Hdr.StreamId;
+    MsgId = (CFE_SB_MsgId_t)MsgPtr->Hdr.StreamId;
 
     TotalMsgSize = CFE_SB_GetTotalMsgLength(MsgPtr);
     HdrSize = CFE_SB_MsgHdrSize(MsgId);
@@ -315,7 +315,7 @@ void Ut_CFE_SB_SetUserDataLengthHook(CFE_SB_MsgPtr_t MsgPtr,uint16 DataLength)
 
     uint32 TotalMsgSize, HdrSize;
     CFE_SB_MsgId_t MsgId;
-    MsgId = MsgPtr->Hdr.StreamId;
+    MsgId = (CFE_SB_MsgId_t)MsgPtr->Hdr.StreamId;
 
     TotalMsgSize = CFE_SB_GetTotalMsgLength(MsgPtr);
     HdrSize = CFE_SB_MsgHdrSize(MsgId);
