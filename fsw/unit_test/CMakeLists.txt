@@ -5,6 +5,8 @@ set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
 
 # Set include directories
 include_directories(
+	../mission_inc
+	../platform_inc
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/ut-assert/inc
 	${CFE_INC_DIRS}
@@ -44,10 +46,6 @@ target_link_libraries(CF-UT -fprofile-arcs gcov ${CMAKE_THREAD_LIBS_INIT})
 # We need to both run the test and compare the as-run with the expected output
 # with a diff command. 
 add_test(NAME cf-ut
-    COMMAND ${CMAKE_COMMAND}
-    	-DTEST_PROG=$<TARGET_FILE:CF-UT>
-    	-DEXPECTED_OUTPUT=${UNIT_TEST_INPUT_DIR}/cf_utf_test.out
-    	-DACTUAL_OUTPUT=${CMAKE_CURRENT_BINARY_DIR}/cf_utf_test.out
-    -P ${CMAKE_CURRENT_SOURCE_DIR}/runtest.cmake)
+    COMMAND ./CF-UT)
 
 

@@ -2,7 +2,7 @@
 /*
  * Filename: uttest.c
  *
- *  Copyright © 2007-2014 United States Government as represented by the 
+ *  Copyright ï¿½ 2007-2014 United States Government as represented by the 
  *  Administrator of the National Aeronautics and Space Administration. 
  *  All Other Rights Reserved.  
  *
@@ -76,7 +76,6 @@ int UtTest_Run(void)
             if (UtTestDataBaseEntry->Setup)    { UtTestDataBaseEntry->Setup(); }
             if (UtTestDataBaseEntry->Test)     { UtTestDataBaseEntry->Test(); UtTestsExecutedCount++; }
             if (UtTestDataBaseEntry->Teardown) { UtTestDataBaseEntry->Teardown(); }
-
             UtListNode = UtListNode->Next;
         }
     }
@@ -88,5 +87,5 @@ int UtTest_Run(void)
     
     UtList_Reset(&UtTestDataBase);
 
-    return (UtAssert_GetFailCount() > 0);
+    return UtAssert_GetFailCount();
 }
