@@ -2,7 +2,7 @@
 ** File:
 **   $Id: cf_utils.c 1.22.1.1 2015/03/06 15:30:38EST sstrege Exp  $
 **
-**   Copyright © 2007-2014 United States Government as represented by the 
+**   Copyright ï¿½ 2007-2014 United States Government as represented by the 
 **   Administrator of the National Aeronautics and Space Administration. 
 **   All Other Rights Reserved.  
 **
@@ -1161,7 +1161,7 @@ uint32  CF_GetPktType(CFE_SB_MsgId_t MsgId)
 uint8 CF_GetResponseChanFromMsgId(CFE_SB_MsgPtr_t MessagePtr)
 {
     uint32          i;
-    CFE_SB_MsgId_t  MessageID;
+    CFE_SB_MsgId_t  MessageID = 0;
     
     /* get MsgId from input packet and lookup the class2 response channel in the table.*/
     MessageID = CFE_SB_GetMsgId (MessagePtr);

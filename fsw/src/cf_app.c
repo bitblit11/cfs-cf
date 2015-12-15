@@ -171,9 +171,12 @@ void CF_AppMain(void)
 
     /* Wait to be sure TO has created the semaphore */
     CFE_ES_WaitForStartupSync(CF_STARTUP_SYNC_TIMEOUT);
-    
-    CF_GetHandshakeSemIds();
 
+    if(CF_AppData.RunStatus != CFE_ES_APP_ERROR)
+    {
+    	CF_GetHandshakeSemIds();
+    }
+    
     /*
     ** Application Main Loop.
     */
@@ -1047,12 +1050,13 @@ void CF_SendPDUToEngine(CFE_SB_MsgPtr_t MessagePtr)
 
 void CF_GetHandshakeSemIds(void)
 {
-    int32 Status,i;
+    uint32 i = 0;
+    int32 Status;
 
     for(i=0;i<CF_MAX_PLAYBACK_CHANNELS;i++)
     {
-        
-        if(CF_AppData.Tbl->OuCh[i].EntryInUse == CF_ENTRY_IN_USE) 
+
+        if(CF_AppData.Tbl->OuCh[i].EntryInUse == CF_ENTRY_IN_USE)
         {
             Status = OS_CountSemGetIdByName(&CF_AppData.Chan[i].HandshakeSemId, 
                  (const char *)&CF_AppData.Tbl->OuCh[i].SemName);
@@ -1061,7 +1065,7 @@ void CF_GetHandshakeSemIds(void)
                 CFE_EVS_SendEvent(CF_HANDSHAKE_ERR1_EID, CFE_EVS_ERROR,
                     "SemGetId Err:Chan %d downlink PDUs cannot be throttled.0x%08X",i,Status);
                 CF_AppData.Chan[i].HandshakeSemId = CF_INVALID;
-        
+
             }
 #ifdef CF_DEBUG            
             else{

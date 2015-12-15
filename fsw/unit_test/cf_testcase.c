@@ -1011,9 +1011,8 @@ void Test_CF_AppMain_SemGetIdByNameFail(void){
   CF_AppMain();
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==2,"Event Count = 2");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_CFGTBL_GADR_ERR_EID, CFE_EVS_ERROR, "", "Error Event Sent");
-  UtAssert_EventSent(CF_HANDSHAKE_ERR1_EID, CFE_EVS_ERROR, "", "Error Event Sent");
 
 }/* end Test_CF_AppMain_SemGetIdByNameFail */
 
@@ -1070,6 +1069,8 @@ void Test_CF_AppMain_RcvMsgOkOnFirst(void)
 void Test_CF_HousekeepingCmd(void){
 
   CF_NoArgsCmd_t  HousekeepingCmdMsg;
+
+  CF_AppInit();
   
   /* Setup Inputs */
   CFE_SB_InitMsg(&HousekeepingCmdMsg, CF_SEND_HK_MID, sizeof(CF_NoArgsCmd_t), TRUE);
@@ -1079,7 +1080,7 @@ void Test_CF_HousekeepingCmd(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&HousekeepingCmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==0,"Event Count = 0");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==9,"Event Count = 9");
   UtAssert_PacketSent(CF_HK_TLM_MID, "Housekeeping Packet Sent");
 
 }/* end Test_CF_HousekeepingCmd */
@@ -1109,6 +1110,9 @@ void Test_CF_HkCmdTblUpdated(void){
 
   CF_NoArgsCmd_t  HousekeepingCmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&HousekeepingCmdMsg, CF_SEND_HK_MID, sizeof(CF_NoArgsCmd_t), TRUE);
   //The line below is needed to get coverage in CF_CheckForTblRequests
@@ -1129,6 +1133,9 @@ void Test_CF_HkCmdValPending(void){
 
   CF_NoArgsCmd_t  HousekeepingCmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&HousekeepingCmdMsg, CF_SEND_HK_MID, sizeof(CF_NoArgsCmd_t), TRUE);
     //The line below is needed to get coverage in CF_CheckForTblRequests
@@ -1148,6 +1155,9 @@ void Test_CF_NoopCmd(void){
 
   CF_NoArgsCmd_t  NoopCmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&NoopCmdMsg, CF_CMD_MID, sizeof(CF_NoArgsCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&NoopCmdMsg, CF_NOOP_CC); 
@@ -1167,6 +1177,9 @@ void Test_CF_NoopCmdInvLen(void){
 
   CF_NoArgsCmd_t  NoopCmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&NoopCmdMsg, CF_CMD_MID, 1, TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&NoopCmdMsg, CF_NOOP_CC); 
@@ -1188,6 +1201,9 @@ void Test_CF_WakeupCmd(void){
 
   CF_NoArgsCmd_t  WakeupCmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&WakeupCmdMsg, CF_WAKE_UP_REQ_CMD_MID, sizeof(CF_NoArgsCmd_t), TRUE);
 
@@ -1275,6 +1291,9 @@ header field wrongly set. Still get 100% coverage on CF_SendPDUToEngine */
   
   CF_PDU_Msg_t    IncomingPduMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&IncomingPduMsg, CF_INCOMING_PDU_MID, sizeof(CF_PDU_Msg_t), TRUE);
   IncomingPduMsg.PHdr.Octet1 = 0x04;//file directive,toward rcvr,class1,crc not present
@@ -1302,6 +1321,9 @@ void Test_CF_InPDUTlmPktCmd(void){
 
   CF_PDU_Msg_t    IncomingPduMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&IncomingPduMsg, 0x08FD, sizeof(CF_PDU_Msg_t), TRUE);
   IncomingPduMsg.PHdr.Octet1 = 0x04;//file directive,toward rcvr,class1,crc not present
@@ -1590,6 +1612,9 @@ void Test_CF_SuspendFilenameCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SUSPEND_CC);
@@ -1610,6 +1635,9 @@ void Test_CF_SuspendInvFilenameCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SUSPEND_CC);
@@ -1630,6 +1658,9 @@ void Test_CF_SuspendCmdInvLen(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 55, FALSE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SUSPEND_CC);
@@ -1651,6 +1682,9 @@ void Test_CF_SuspendUntermStrgCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SUSPEND_CC);  
@@ -1671,6 +1705,9 @@ void Test_CF_SuspendAllCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SUSPEND_CC);
@@ -1691,6 +1728,9 @@ void Test_CF_ResumeCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_RESUME_CC);
@@ -1711,6 +1751,9 @@ void Test_CF_ResumeAllCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_RESUME_CC);
@@ -1732,6 +1775,9 @@ void Test_CF_CancelCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_CANCEL_CC);
@@ -1752,6 +1798,9 @@ void Test_CF_CancelAllCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_CANCEL_CC);
@@ -1773,6 +1822,9 @@ void Test_CF_AbandonCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_ABANDON_CC);
@@ -1793,6 +1845,9 @@ void Test_CF_AbandonAllCmd(void){
 
   CF_CARSCmd_t    CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_CARSCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_ABANDON_CC);
@@ -1813,6 +1868,9 @@ void Test_CF_AbandonAllCmd(void){
 void Test_CF_SetMibParamCmd(void){
 
   CF_SetMibParam_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
@@ -1836,6 +1894,9 @@ void Test_CF_SetMibParamCmd(void){
 void Test_CF_SetMibParamCmdInvLen(void){
 
   CF_SetMibParam_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 88, FALSE);
@@ -1861,6 +1922,9 @@ void Test_CF_SetMibCmdUntermParam(void){
 
   CF_SetMibParam_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_MIB_PARAM_CC);
@@ -1883,6 +1947,9 @@ void Test_CF_SetMibCmdUntermParam(void){
 void Test_CF_SetMibCmdUntermValue(void){
 
   CF_SetMibParam_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
@@ -1908,6 +1975,9 @@ void Test_CF_SetMibCmdFileChunkOverLimit(void){
 
   CF_SetMibParam_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_MIB_PARAM_CC);
@@ -1930,6 +2000,9 @@ void Test_CF_SetMibCmdFileChunkOverLimit(void){
 void Test_CF_SetMibCmdMyIdInvalid(void){
 
   CF_SetMibParam_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
@@ -1954,6 +2027,9 @@ void Test_CF_SetMibCmdAckLimit(void){
 
   CF_SetMibParam_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_MIB_PARAM_CC);
@@ -1976,6 +2052,9 @@ void Test_CF_SetMibCmdAckLimit(void){
 void Test_CF_SetMibCmdAckTimeout(void){
 
   CF_SetMibParam_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
@@ -2000,6 +2079,9 @@ void Test_CF_SetMibCmdInactTimeout(void){
 
   CF_SetMibParam_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_MIB_PARAM_CC);
@@ -2023,6 +2105,9 @@ void Test_CF_SetMibCmdNakLimit(void){
 
   CF_SetMibParam_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_MIB_PARAM_CC);
@@ -2045,6 +2130,9 @@ void Test_CF_SetMibCmdNakLimit(void){
 void Test_CF_SetMibCmdNakTimeout(void){
 
   CF_SetMibParam_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
@@ -2095,6 +2183,9 @@ void Test_CF_SetMibMyId(void){
 
   CF_SetMibParam_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_MIB_PARAM_CC);
@@ -2118,6 +2209,9 @@ void Test_CF_GetMibParamCmd(void){
 
   CF_GetMibParam_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_GetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_GET_MIB_PARAM_CC);
@@ -2137,6 +2231,9 @@ void Test_CF_GetMibParamCmd(void){
 void Test_CF_GetMibParamCmdInvLen(void){
 
   CF_GetMibParam_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 0, TRUE);
@@ -2160,6 +2257,9 @@ void Test_CF_GetMibCmdUntermParam(void){
 
   CF_GetMibParam_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_GetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_GET_MIB_PARAM_CC);
@@ -2181,6 +2281,9 @@ void Test_CF_GetMibCmdUntermParam(void){
 void Test_CF_GetMibParamCmdInvParam(void){
 
   CF_GetMibParam_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_GetMibParam_t), TRUE);
@@ -2205,6 +2308,9 @@ void Test_CF_SendCfgParamsCmd(void){
 
   CF_NoArgsCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_NoArgsCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SEND_CFG_PARAMS_CC); 
@@ -2224,6 +2330,9 @@ void Test_CF_SendCfgParamsCmdInvLen(void){
 
   CF_NoArgsCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 20, FALSE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SEND_CFG_PARAMS_CC);
@@ -2245,6 +2354,9 @@ void Test_CF_SendCfgParamsCmdInvLen(void){
 void Test_CF_WriteQueueCmdCreatErr(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
@@ -2269,6 +2381,9 @@ void Test_CF_WriteQueueCmdCreatErr(void){
 void Test_CF_WriteQueueCmdInvLen(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 270, FALSE);
@@ -2297,6 +2412,9 @@ void Test_CF_WriteQueueUpQValueErr(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_WRITE_QUEUE_INFO_CC); 
@@ -2322,6 +2440,9 @@ void Test_CF_WriteQueueUpQValueErr(void){
 void Test_CF_WriteQueueUpDefFilename(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
@@ -2350,6 +2471,9 @@ void Test_CF_WriteQueueUpCustomFilename(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_WRITE_QUEUE_INFO_CC); 
@@ -2377,6 +2501,9 @@ void Test_CF_WriteQueueOutQValueErr(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_WRITE_QUEUE_INFO_CC); 
@@ -2403,6 +2530,9 @@ void Test_CF_WriteQueueOutQTypeErr(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_WRITE_QUEUE_INFO_CC); 
@@ -2428,6 +2558,9 @@ void Test_CF_WriteQueueOutQTypeErr(void){
 void Test_CF_WriteQueueOutChanErr(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
@@ -2457,6 +2590,9 @@ void Test_CF_WriteQueueOutChanErr(void){
 void Test_CF_WriteQueueOutDefFilename(void){
 
   CF_WriteQueueCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
@@ -2488,6 +2624,7 @@ void Test_CF_WriteQueueOneEntry(void){
 
   /* reset CF globals etc */
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Create one queue entry */
   /* Execute a playback file command so that one queue entry is added to the pending queue */
@@ -2528,7 +2665,7 @@ void Test_CF_WriteQueueOneEntry(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&WrQCmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==11,"Event Count = 11");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==2,"Event Count = 2");
   UtAssert_EventSent(CF_SND_Q_INFO_EID, CFE_EVS_DEBUG, "", "Debug Event Sent");
   UtAssert_EventSent(CF_PLAYBACK_FILE_EID, CFE_EVS_DEBUG, "", "Debug Event Sent");  
 
@@ -2541,6 +2678,7 @@ void Test_CF_WriteQueueOutCustomFilename(void){
   CF_WriteQueueCmd_t  CmdMsg;
 
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_WriteQueueCmd_t), TRUE);
@@ -2559,7 +2697,7 @@ void Test_CF_WriteQueueOutCustomFilename(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SND_Q_INFO_EID, CFE_EVS_DEBUG, "", "Debug Event Sent");
 
 }/* end Test_CF_WriteQueueOutCustomFilename */
@@ -2599,6 +2737,7 @@ void Test_CF_WriteQueueEntryWriteErr(void){
 
   /* reset CF globals etc */
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Create one queue entry */
   /* Execute a playback file command so that one queue entry is added to the pending queue */
@@ -2643,7 +2782,7 @@ void Test_CF_WriteQueueEntryWriteErr(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&WrQCmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==11,"Event Count = 11");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==2,"Event Count = 2");
   UtAssert_EventSent(CF_PLAYBACK_FILE_EID, CFE_EVS_DEBUG, "", "Debug Event Sent");  
   UtAssert_EventSent(CF_FILEWRITE_ERR_EID, CFE_EVS_ERROR, "", "Error Event Sent");
 
@@ -2908,6 +3047,9 @@ void Test_CF_QuickStatusFilenameCmd(void){
 
   CF_QuickStatCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_QuickStatCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_QUICKSTATUS_CC);
@@ -2948,6 +3090,9 @@ void Test_CF_InvMsgIdCmd(void){
 
   CF_SetMibParam_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, 0x20F, sizeof(CF_SetMibParam_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_FREEZE_CC); 
@@ -2978,6 +3123,9 @@ void Test_CF_SendTransDiagCmdSuccess(void){
 
   CF_SendTransCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SendTransCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SEND_TRANS_DIAG_DATA_CC);
@@ -2999,6 +3147,9 @@ void Test_CF_SendTransDiagCmdSuccess(void){
 void Test_CF_SendTransDiagFileNotFound(void){
 
   CF_SendTransCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SendTransCmd_t), TRUE);
@@ -3022,6 +3173,9 @@ void Test_CF_SendTransDiagTransNotFound(void){
 
   CF_SendTransCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SendTransCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SEND_TRANS_DIAG_DATA_CC); 
@@ -3043,6 +3197,9 @@ void Test_CF_SendTransDiagTransNotFound(void){
 void Test_CF_SendTransDiagCmdInvLen(void){
 
   CF_SendTransCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 3, TRUE);
@@ -3066,6 +3223,9 @@ void Test_CF_SendTransDiagUntermString(void){
 
   CF_SendTransCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SendTransCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SEND_TRANS_DIAG_DATA_CC); 
@@ -3087,6 +3247,9 @@ void Test_CF_SendTransDiagUntermString(void){
 void Test_CF_SendTransDiagInvFilename(void){
 
   CF_SendTransCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SendTransCmd_t), TRUE);
@@ -3112,7 +3275,8 @@ void Test_CF_SetPollParamCmd(void){
   CF_SetPollParamCmd_t  CmdMsg;
 
   /* Setup Inputs */
-  CF_AppInit();  
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetPollParamCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_POLL_PARAM_CC); 
   
@@ -3130,7 +3294,7 @@ void Test_CF_SetPollParamCmd(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SET_POLL_PARAM1_EID, CFE_EVS_DEBUG, "", "Debug Event Sent");
 
 }/* end Test_CF_SetPollParamCmd */
@@ -3139,6 +3303,9 @@ void Test_CF_SetPollParamCmd(void){
 void Test_CF_SetPollParamCmdInvLen(void){
 
   CF_SetPollParamCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 4, TRUE);
@@ -3162,7 +3329,8 @@ void Test_CF_SetPollParamInvChan(void){
   CF_SetPollParamCmd_t  CmdMsg;
 
   /* Setup Inputs */
-  CF_AppInit();  
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetPollParamCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_POLL_PARAM_CC); 
   
@@ -3180,7 +3348,7 @@ void Test_CF_SetPollParamInvChan(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SET_POLL_PARAM_ERR1_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
 
@@ -3192,7 +3360,8 @@ void Test_CF_SetPollParamInvDir(void){
   CF_SetPollParamCmd_t  CmdMsg;
 
   /* Setup Inputs */
-  CF_AppInit();  
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetPollParamCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_POLL_PARAM_CC); 
   
@@ -3210,7 +3379,7 @@ void Test_CF_SetPollParamInvDir(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SET_POLL_PARAM_ERR2_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
 
@@ -3222,7 +3391,8 @@ void Test_CF_SetPollParamInvClass(void){
   CF_SetPollParamCmd_t  CmdMsg;
 
   /* Setup Inputs */
-  CF_AppInit();  
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetPollParamCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_POLL_PARAM_CC); 
   
@@ -3240,7 +3410,7 @@ void Test_CF_SetPollParamInvClass(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SET_POLL_PARAM_ERR3_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
 
@@ -3252,7 +3422,8 @@ void Test_CF_SetPollParamInvPreserve(void){
   CF_SetPollParamCmd_t  CmdMsg;
 
   /* Setup Inputs */
-  CF_AppInit();  
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetPollParamCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_POLL_PARAM_CC); 
   
@@ -3270,7 +3441,7 @@ void Test_CF_SetPollParamInvPreserve(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SET_POLL_PARAM_ERR4_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
 
@@ -3282,7 +3453,8 @@ void Test_CF_SetPollParamInvSrc(void){
   CF_SetPollParamCmd_t  CmdMsg;
 
   /* Setup Inputs */
-  CF_AppInit();  
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetPollParamCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_POLL_PARAM_CC); 
   
@@ -3300,7 +3472,7 @@ void Test_CF_SetPollParamInvSrc(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SET_POLL_PARAM_ERR5_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
 
@@ -3312,7 +3484,8 @@ void Test_CF_SetPollParamInvDst(void){
   CF_SetPollParamCmd_t  CmdMsg;
 
   /* Setup Inputs */
-  CF_AppInit();  
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetPollParamCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_POLL_PARAM_CC); 
   
@@ -3330,7 +3503,7 @@ void Test_CF_SetPollParamInvDst(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SET_POLL_PARAM_ERR6_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
 
@@ -3343,7 +3516,8 @@ void Test_CF_SetPollParamInvId(void){
   CF_SetPollParamCmd_t  CmdMsg;
 
   /* Setup Inputs */
-  CF_AppInit();  
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_SetPollParamCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_SET_POLL_PARAM_CC); 
   
@@ -3361,7 +3535,7 @@ void Test_CF_SetPollParamInvId(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_SET_POLL_PARAM_ERR7_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
 
@@ -3371,6 +3545,9 @@ void Test_CF_SetPollParamInvId(void){
 void Test_CF_DeleteQueueNodeCmdInvLen(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 100, FALSE);
@@ -3394,6 +3571,9 @@ void Test_CF_DeleteQueueNodeTransUnterm(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DELETE_QUEUE_NODE_CC);
@@ -3415,6 +3595,9 @@ void Test_CF_DeleteQueueNodeTransUnterm(void){
 void Test_CF_DeleteQueueNodeInvFilename(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
@@ -3439,6 +3622,9 @@ void Test_CF_DeleteQueueNodeFileNotFound(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DELETE_QUEUE_NODE_CC);
@@ -3460,6 +3646,9 @@ void Test_CF_DeleteQueueNodeFileNotFound(void){
 void Test_CF_DeleteQueueNodeIdNotFound(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
@@ -3484,6 +3673,9 @@ void Test_CF_DeleteQueueNodeUpActive(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DELETE_QUEUE_NODE_CC);
@@ -3520,18 +3712,21 @@ void Test_CF_DeleteQueueNodeUpHist(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DELETE_QUEUE_NODE_CC);
   strcpy(CmdMsg.Trans,"0.23_500");
   CF_AppData.Hk.ErrCounter = 0;
-  
+
+  CF_AppData.MsgPtr = (CFE_SB_MsgPtr_t)&CmdMsg;
   CF_TstUtil_CreateOneUpHistoryQueueEntry();
 
   /* Have put pool return positive number(indicating success) instead of default zero */
   Ut_CFE_ES_SetReturnCode(UT_CFE_ES_PUTPOOLBUF_INDEX, 16, 1);
 
-  CF_AppData.MsgPtr = (CFE_SB_MsgPtr_t)&CmdMsg;  
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
   
   /* Verify Outputs */
@@ -3549,6 +3744,9 @@ void Test_CF_DeleteQueueNodeUpHist(void){
 void Test_CF_DeleteQueueNodePbPend(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
@@ -3574,6 +3772,9 @@ void Test_CF_DeleteQueueNodePbPend(void){
 void Test_CF_DeleteQueueNodePbActive(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
@@ -3606,6 +3807,9 @@ void Test_CF_DeleteQueueNodePbHist(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DELETE_QUEUE_NODE_CC);
@@ -3635,6 +3839,9 @@ void Test_CF_DeleteQueueNodePutFail(void){
 
   CF_DequeueNodeCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DELETE_QUEUE_NODE_CC);
@@ -3663,6 +3870,9 @@ void Test_CF_DeleteQueueNodeInvType(void){
   CF_QueueEntry_t     *Ptr;
   CF_DequeueNodeCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_DequeueNodeCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DELETE_QUEUE_NODE_CC);
@@ -3688,6 +3898,9 @@ void Test_CF_PurgeQueueCmdInvLen(void){
 
   CF_PurgeQueueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 28000, FALSE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PURGE_QUEUE_CC);
@@ -3710,6 +3923,7 @@ void Test_CF_PurgeUplinkActive(void){
   CF_PurgeQueueCmd_t  CmdMsg;
   
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
@@ -3723,7 +3937,7 @@ void Test_CF_PurgeUplinkActive(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_PURGEQ_ERR1_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
   
@@ -3734,6 +3948,9 @@ void Test_CF_PurgeUpHistory(void){
 
   CF_PurgeQueueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PURGE_QUEUE_CC); 
@@ -3765,6 +3982,7 @@ void Test_CF_PurgeInvUpQ(void){
   CF_PurgeQueueCmd_t  CmdMsg;
   
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
@@ -3778,7 +3996,7 @@ void Test_CF_PurgeInvUpQ(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_PURGEQ_ERR2_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
   
@@ -3790,6 +4008,7 @@ void Test_CF_PurgeOutActive(void){
   CF_PurgeQueueCmd_t  CmdMsg;
   
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
@@ -3803,7 +4022,7 @@ void Test_CF_PurgeOutActive(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_PURGEQ_ERR3_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
   
@@ -3815,6 +4034,9 @@ void Test_CF_PurgeOutPend(void){
 
   CF_PurgeQueueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PURGE_QUEUE_CC); 
@@ -3843,6 +4065,9 @@ void Test_CF_PurgeOutHist(void){
 
   CF_PurgeQueueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PURGE_QUEUE_CC); 
@@ -3876,6 +4101,7 @@ void Test_CF_PurgeInvOutQ(void){
   CF_PurgeQueueCmd_t  CmdMsg;
   
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
@@ -3889,7 +4115,7 @@ void Test_CF_PurgeInvOutQ(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_PURGEQ_ERR4_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
   
@@ -3901,6 +4127,7 @@ void Test_CF_PurgeInvOutChan(void){
   CF_PurgeQueueCmd_t  CmdMsg;
   
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
@@ -3914,7 +4141,7 @@ void Test_CF_PurgeInvOutChan(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_PURGEQ_ERR5_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
   
@@ -3926,6 +4153,7 @@ void Test_CF_PurgeInvType(void){
   CF_PurgeQueueCmd_t  CmdMsg;
   
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PurgeQueueCmd_t), TRUE);
@@ -3939,7 +4167,7 @@ void Test_CF_PurgeInvType(void){
   CF_AppPipe((CFE_SB_MsgPtr_t)&CmdMsg);
 
   /* Verify Outputs */  
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==10,"Event Count = 10");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==1,"Event Count = 1");
   UtAssert_EventSent(CF_PURGEQ_ERR6_EID, CFE_EVS_ERROR, "", "Error Event Sent");
   UtAssert_True(CF_AppData.Hk.ErrCounter == 1, "CF_AppData.Hk.ErrCounter = 1");
   
@@ -3950,6 +4178,9 @@ void Test_CF_EnableDequeueCmd(void){
 
   CF_EnDisDequeueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisDequeueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_ENABLE_DEQUEUE_CC);
@@ -3972,6 +4203,9 @@ void Test_CF_EnableDequeueCmdInvLen(void){
 
   CF_EnDisDequeueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 97, FALSE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_ENABLE_DEQUEUE_CC);
@@ -3994,6 +4228,9 @@ void Test_CF_EnableDequeueInvChan(void){
 
   CF_EnDisDequeueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisDequeueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_ENABLE_DEQUEUE_CC);
@@ -4016,6 +4253,9 @@ void Test_CF_DisableDequeueCmd(void){
 
   CF_EnDisDequeueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisDequeueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DISABLE_DEQUEUE_CC);
@@ -4038,6 +4278,9 @@ void Test_CF_DisableDequeueCmdInvLen(void){
 
   CF_EnDisDequeueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 34, FALSE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DISABLE_DEQUEUE_CC);
@@ -4060,6 +4303,9 @@ void Test_CF_DisableDequeueInvChan(void){
 
   CF_EnDisDequeueCmd_t  CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisDequeueCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DISABLE_DEQUEUE_CC);
@@ -4081,6 +4327,9 @@ void Test_CF_DisableDequeueInvChan(void){
 void Test_CF_EnableDirPollingCmd(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisPollCmd_t), TRUE);
@@ -4106,6 +4355,9 @@ void Test_CF_EnableDirPollingCmdInvLen(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 60, FALSE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_ENABLE_DIR_POLLING_CC); 
@@ -4130,6 +4382,9 @@ void Test_CF_EnablePollingInvChan(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisPollCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_ENABLE_DIR_POLLING_CC); 
@@ -4152,6 +4407,9 @@ void Test_CF_EnablePollingInvChan(void){
 void Test_CF_EnablePollingInvDir(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisPollCmd_t), TRUE);
@@ -4176,6 +4434,9 @@ void Test_CF_EnablePollingAll(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisPollCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_ENABLE_DIR_POLLING_CC); 
@@ -4199,6 +4460,9 @@ void Test_CF_DisableDirPollingCmd(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisPollCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DISABLE_DIR_POLLING_CC);
@@ -4220,6 +4484,9 @@ void Test_CF_DisableDirPollingCmdInvLen(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 30000, FALSE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DISABLE_DIR_POLLING_CC);
@@ -4240,6 +4507,9 @@ void Test_CF_DisableDirPollingCmdInvLen(void){
 void Test_CF_DisablePollingInvChan(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisPollCmd_t), TRUE);
@@ -4264,6 +4534,9 @@ void Test_CF_DisablePollingInvDir(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisPollCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DISABLE_DIR_POLLING_CC); 
@@ -4287,6 +4560,9 @@ void Test_CF_DisablePollingAll(void){
 
   CF_EnDisPollCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_EnDisPollCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_DISABLE_DIR_POLLING_CC); 
@@ -4308,6 +4584,9 @@ void Test_CF_KickStartCmd(void){
 
   CF_KickstartCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_KickstartCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_KICKSTART_CC);
@@ -4327,6 +4606,9 @@ void Test_CF_KickStartCmd(void){
 void Test_CF_KickStartCmdInvLen(void){
 
   CF_KickstartCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 650, FALSE);
@@ -4350,6 +4632,9 @@ void Test_CF_KickStartCmdInvChan(void){
 
   CF_KickstartCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_KickstartCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_KICKSTART_CC);
@@ -4372,6 +4657,9 @@ void Test_CF_QuickStatusTransCmd(void){
 
   CF_QuickStatCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_QuickStatCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_QUICKSTATUS_CC);
@@ -4393,6 +4681,9 @@ void Test_CF_QuickStatusTransCmd(void){
 void Test_CF_QuickStatusActiveTrans(void){
 
   CF_QuickStatCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_QuickStatCmd_t), TRUE);
@@ -4422,6 +4713,9 @@ void Test_CF_QuickStatusActiveName(void){
 
   CF_QuickStatCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_QuickStatCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_QUICKSTATUS_CC);
@@ -4450,6 +4744,9 @@ void Test_CF_QuickStatusActiveSuspended(void){
 
   CF_QuickStatCmd_t   CmdMsg;
   CF_CARSCmd_t        SuspendCmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_QuickStatCmd_t), TRUE);
@@ -4486,7 +4783,12 @@ void Test_CF_QuickStatusCmdInvLen(void){
 
   CF_QuickStatCmd_t  CmdMsg;
 
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 0, TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_QUICKSTATUS_CC);
   CF_AppData.Hk.ErrCounter = 0;
@@ -4508,6 +4810,9 @@ void Test_CF_QuickStatusCmdInvLen(void){
 void Test_CF_QuickStatusUntermString(void){
 
   CF_QuickStatCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_QuickStatCmd_t), TRUE);
@@ -4532,6 +4837,9 @@ void Test_CF_QuickStatusUntermString(void){
 void Test_CF_QuickStatusInvFilename(void){
 
   CF_QuickStatCmd_t  CmdMsg;
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
 
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_QuickStatCmd_t), TRUE);
@@ -4559,6 +4867,9 @@ void Test_CF_PbFileNoMem(void){
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4592,6 +4903,9 @@ void Test_CF_PbFileCmdInvLen(void){
 
   CF_PlaybackFileCmd_t   CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 16, TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4614,7 +4928,7 @@ void Test_CF_PbFileCmdParamErr(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4648,7 +4962,7 @@ void Test_CF_PbFileChanNotInUse(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4682,7 +4996,7 @@ void Test_CF_PbFileInvSrcFilename(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4717,7 +5031,7 @@ void Test_CF_PbFileInvDstFilename(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4751,7 +5065,7 @@ void Test_CF_PbFilePendQFull(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4788,7 +5102,7 @@ void Test_CF_PbFileInvPeerId(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4823,7 +5137,10 @@ void Test_CF_PbFileFileOpen(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
-  
+
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4862,7 +5179,7 @@ void Test_CF_PbFileFileOnQ(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackFileCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackFileCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_FILE_CC);
@@ -4905,7 +5222,7 @@ void Test_CF_PbDirCmd(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackDirCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackDirCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_DIR_CC);
@@ -4939,7 +5256,7 @@ void Test_CF_PbDirCmdOpenErr(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackDirCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackDirCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_DIR_CC);
@@ -4971,6 +5288,9 @@ void Test_CF_PbDirCmdInvLen(void){
 
   CF_PlaybackDirCmd_t   CmdMsg;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, 7, TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_DIR_CC);
@@ -4992,8 +5312,11 @@ void Test_CF_PbDirCmdParamErr(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackDirCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackDirCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_DIR_CC);
   CmdMsg.Class = 3;/* invalid class */
@@ -5026,7 +5349,7 @@ void Test_CF_PbDirChanNotInUse(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackDirCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackDirCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_DIR_CC);
@@ -5060,7 +5383,7 @@ void Test_CF_PbDirInvSrcPath(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackDirCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackDirCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_DIR_CC);
@@ -5095,7 +5418,7 @@ void Test_CF_PbDirInvDstPath(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackDirCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackDirCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_DIR_CC);
@@ -5129,7 +5452,7 @@ void Test_CF_PbDirInvPeerId(void){
 
   int32               ExpAppInitRtn,ActAppInitRtn;
   CF_PlaybackDirCmd_t   CmdMsg;
-  
+
   /* Setup Inputs */
   CFE_SB_InitMsg(&CmdMsg, CF_CMD_MID, sizeof(CF_PlaybackDirCmd_t), TRUE);
   CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&CmdMsg, CF_PLAYBACK_DIR_CC);
@@ -5164,6 +5487,9 @@ void Test_CF_QDirFilesQFull(void){
   CF_QueueDirFiles_t  Qdf;
   uint32              ActRtn,ExpRtn;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   Qdf.Chan = 0;
   Qdf.Class = 1;
@@ -5205,7 +5531,7 @@ void Test_CF_QDirFilesNoMem(void){
 
   CF_QueueDirFiles_t  Qdf;
   uint32              ActRtn,ExpRtn;
-  
+
   /* Setup Inputs */
   Qdf.Chan = 0;
   Qdf.Class = 1;
@@ -5250,6 +5576,9 @@ void Test_CF_QDirFilesFileOnQ(void){
   CF_QueueDirFiles_t  Qdf;
   uint32              ActRtn,ExpRtn;
   
+  CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
+
   /* Setup Inputs */
   Qdf.Chan = 0;
   Qdf.Class = 1;
@@ -5303,6 +5632,7 @@ void Test_CF_QDirFilesFileOpen(void){
   strcpy(Qdf.DstPath,"/gnd/");
  
   CF_AppInit();
+  Ut_CFE_EVS_ClearEventQueue();
       
   /* Force OS_FDGetInfo to return 'file is open' and success */
   Ut_OSFILEAPI_SetFunctionHook(UT_OSFILEAPI_FDGETINFO_INDEX, &OS_FDGetInfoHook);
@@ -5323,7 +5653,7 @@ void Test_CF_QDirFilesFileOpen(void){
   ActRtn = CF_QueueDirectoryFiles(&Qdf);
 
   /* Verify Outputs */
-  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==12,"Event Count = 12");
+  UtAssert_True(Ut_CFE_EVS_GetEventQueueDepth()==3,"Event Count = 3");
   UtAssert_True(ActRtn == ExpRtn, "ActRtn = ExpRtn");
   UtAssert_EventSent(CF_QDIR_INV_NAME1_EID,CFE_EVS_ERROR, "", "ERROR Event Sent");
   UtAssert_EventSent(CF_QDIR_INV_NAME2_EID,CFE_EVS_ERROR, "", "ERROR Event Sent");
