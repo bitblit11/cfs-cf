@@ -15,7 +15,7 @@ include_directories(
 
 add_definitions(-DCFE_LINUX)
 
-set(CMAKE_C_FLAGS "-g -O0 -Wformat=0 -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -fprofile-arcs -ftest-coverage -m32")
+set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-g -O0 -Wformat=0 -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -fprofile-arcs -ftest-coverage")
 
 # Add the executables
 add_executable(CF-UT 
@@ -45,7 +45,6 @@ target_link_libraries(CF-UT -fprofile-arcs gcov ${CMAKE_THREAD_LIBS_INIT})
 
 # We need to both run the test and compare the as-run with the expected output
 # with a diff command. 
-add_test(NAME cf-ut
-    COMMAND ./CF-UT)
+add_test(NAME cf-ut COMMAND ./CF-UT)
 
 
