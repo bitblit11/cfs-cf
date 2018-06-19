@@ -40,10 +40,10 @@ include_directories(${OSAL_INC_DIRS})
 include_directories(${PSP_INC_DIRS})
 	
 # Build application
-add_library(${APP_FILE} SHARED ${APP_SRC} ${APP_CUSTOM_SRC})
+add_app(${APP_FILE} SHARED ${APP_SRC} ${APP_CUSTOM_SRC})
 
 # Build tables
-add_library(cf_cfgtable STATIC ${TABLE_DIR}/cf_cfgtable.c)
+add_app(cf_cfgtable STATIC ${TABLE_DIR}/cf_cfgtable.c)
 set_target_properties(cf_cfgtable PROPERTIES PREFIX "" SUFFIX ".tbl")
 
 add_subdirectory(../unit_test unit_test)
