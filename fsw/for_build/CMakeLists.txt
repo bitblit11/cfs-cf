@@ -46,7 +46,7 @@ add_library(${APP_FILE} SHARED ${APP_SRC} ${APP_CUSTOM_SRC})
 add_library(cf_cfgtable STATIC ${TABLE_DIR}/cf_cfgtable.c)
 set_target_properties(cf_cfgtable PROPERTIES PREFIX "" SUFFIX ".tbl")
 
-#add_subdirectory(../unit_test unit_test)
+add_subdirectory(../unit_test unit_test)
 
 # Generate documentation
 find_package(Doxygen)

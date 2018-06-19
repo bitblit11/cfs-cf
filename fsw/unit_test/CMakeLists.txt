@@ -15,7 +15,7 @@ include_directories(
 
 add_definitions(-DCFE_LINUX)
 
-set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-g -O0 -Wformat=0 -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -fprofile-arcs -ftest-coverage")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 -Wformat=0 -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -fprofile-arcs -ftest-coverage")
 
 # Add the executables
 add_executable(CF-UT 
